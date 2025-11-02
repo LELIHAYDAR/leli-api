@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Service {
+  id          Int      @id @default(autoincrement())
+  name        String
+  priceCents  Int
+  durationMin Int
+  appointments Appointment[]
+}
+
+model Appointment {
+  id          Int      @id @default(autoincrement())
+  clientId    Int
+  staffId     Int
+  serviceId   Int
+  startTs     DateTime
+  endTs       DateTime
+  priceCents  Int
+  notes       String?
+  status      String   @default("booked")
+  service     Service  @relation(fields: [serviceId], references: [id])
+}
